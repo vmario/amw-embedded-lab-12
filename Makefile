@@ -25,6 +25,7 @@ MSG_SIZE_AFTER = Size after:
 DEPDIR = dep
 OBJDIR = obj
 TARGETDIR = bin
+LIBDIR = lib
 
 INCLUDES = -I.
 LIBS = -lm
@@ -46,6 +47,7 @@ DEFS = -DF_CPU=$(F_CPU)ul
 
 SRCS = $(wildcard *.cpp)
 OBJS = $(addprefix $(OBJDIR)/,$(SRCS:.cpp=.o))
+OBJS_LIB = $(wildcard $(LIBDIR)/*.o)
 DEPS = $(addprefix $(DEPDIR)/,$(SRCS:.cpp=.d))
 TARGET = $(TARGETDIR)/laboratory
 
@@ -56,8 +58,8 @@ build: $(TARGET).hex $(TARGET).lss $(TARGET).sym
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex $< $@
 
-$(TARGET).elf: $(OBJS) | $(TARGETDIR)
-	$(CXX) $(LDFLAGS) $(LIBS) $(DEFS) -o $@ $(OBJS)
+$(TARGET).elf: $(OBJS) $(OBJS_LIB) | $(TARGETDIR)
+	$(CXX) $(LDFLAGS) $(LIBS) $(DEFS) -o $@ $(OBJS) $(OBJS_LIB)
 
 $(TARGET).lss: $(TARGET).elf
 	$(OBJDUMP) -h -S $< > $@

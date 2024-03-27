@@ -11,7 +11,7 @@ struct LcdDisplay {
 	/**
 	 * Inicjalizuje wyświetlacz.
 	 */
-	void init() const;
+	void initialize() const;
 
 	/**
 	 * Czyści wyświetlacz.
