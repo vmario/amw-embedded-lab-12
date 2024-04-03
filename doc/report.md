@@ -1,5 +1,5 @@
 ---
-title: "Ćwiczenie 11: Obsługa sterownika wyświetlacza alfanumerycznego HD44780"
+title: "Ćwiczenie 12: Obsługa klawiatury analogowej"
 author: [Mariusz Chilmon <<mariusz.chilmon@ctm.gdynia.pl>>]
 lang: "pl"
 titlepage: no
@@ -9,6 +9,7 @@ footer-left: "Sprawozdanie z laboratorium"
 header-includes: |
   \usepackage{awesomebox}
   \usepackage{tikz}
+  \usepackage{xfrac}
   \usetikzlibrary{positioning}
   \usetikzlibrary{positioning}
   \usepackage[raster]{tcolorbox}
@@ -36,67 +37,42 @@ _W trosce o Państwa wyniki proszę o czytelne wpisywanie nazwisk._
 
 ## Zadanie podstawowe
 
-Ile maksymalnie znaków wyświetlacza może obsłużyć sterownik HD44780?
+Wyznacz wartości progowe napięć $V_{threshold}$ dla przycisków w postaci połowy przedziałów między przypisanymi do nich napięciami $V_{key}$. Podaj wzór na wartość pomiaru ADC, której użyjesz w kodzie programu.
 
-\vspace{1.5cm}
+\awesomebox[violet]{2pt}{\faBook}{violet}{$V_{key}$ odczytaj ze schematu w instrukcji do ćwiczenia lub ze schematu ideowego płytki.}
 
-Oszacuj czas potrzebny na zapisanie całej zawartości wyświetlacza.
+\begin{center}
+\begin{tabular}{|c|>{\centering}m{15mm}|>{\centering}m{15mm}|c|} 
+\hline
+Przycisk & $V_{key}$ & $V_{threshold}$ & ADC \\
+\hline
+\texttt{RIGHT} & $0{,}0~\text{V}$ & $0{,}5~\text{V}$ & $\sfrac{0{,}5}{5} \cdot 1024$ \\
+\hline
+\texttt{UP} & $1{,}0~\text{V}$ & $1{,}5~\text{V}$ & $\sfrac{1{,}5}{5} \cdot 1024$ \\ 
+\hline
+\texttt{DOWN} & & & \phantom{WWWWWWWWWWWW} \\[1em]
+\hline
+\texttt{LEFT} & & & \\[1em]
+\hline
+\texttt{SELECT} & & & \\[1em]
+\hline
+\end{tabular}
+\end{center}
+
+Czy zmiana napięcia zasilania zaburzy działanie klawiatury? Dlaczego?
 
 \vspace{1.5cm}
 
 ## Zadanie rozszerzone
 
-Ile bajtów w pamięci symboli zajmuje jeden symbol?
+Od czego zależy maksymalna liczba przycisków, jakie możemy podłączyć do takiej klawiatury?
+
+\vspace{3cm}
+
+W jakim zakresie zmienia się licznik `int16_t counter`?
 
 \vspace{1.5cm}
 
-Ile własnych symboli można zdefiniować w sterowniku HD44780?
+W jakim zakresie zmieniałby się licznik, gdyby był typu `uint16_t`?
 
 \vspace{1.5cm}
-
-\begin{minipage}{0.2\linewidth}
-\tcbset{size=small, colback=white, halign=center, valign=bottom, sharp corners}
-\begin{tcbitemize}[raster row skip=-.5mm, raster column skip=-.5mm, raster equal height=rows,
-        left=0mm, right=0mm,
-        raster columns=8, colframe=white, coltext=gray, fontupper=\footnotesize]
-    \tcbitem 7 \tcbitem 6 \tcbitem 5 \tcbitem 4 \tcbitem 3 \tcbitem 2 \tcbitem 1 \tcbitem 0
-\end{tcbitemize}
-\begin{tcbitemize}[raster row skip=.5mm, raster column skip=.5mm, raster equal height=rows,
-        left=0mm, right=0mm,
-        raster columns=8, colframe=black!10, colback=black!10]
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-\end{tcbitemize}
-\end{minipage}
-\captionof{figure}{Szablon pierwszego znaku}
-
-\vspace{5cm}
-
-\begin{minipage}{0.2\linewidth}
-\tcbset{size=small, colback=white, halign=center, valign=bottom, sharp corners}
-\begin{tcbitemize}[raster row skip=-.5mm, raster column skip=-.5mm, raster equal height=rows,
-        left=0mm, right=0mm,
-        raster columns=8, colframe=white, coltext=gray, fontupper=\footnotesize]
-    \tcbitem 7 \tcbitem 6 \tcbitem 5 \tcbitem 4 \tcbitem 3 \tcbitem 2 \tcbitem 1 \tcbitem 0
-\end{tcbitemize}
-\begin{tcbitemize}[raster row skip=.5mm, raster column skip=.5mm, raster equal height=rows,
-        left=0mm, right=0mm,
-        raster columns=8, colframe=black!10, colback=black!10]
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-    \tcbitem[colback=white] \vphantom{-} \tcbitem[colback=white] \tcbitem[colback=white] \tcbitem \tcbitem \tcbitem \tcbitem \tcbitem
-\end{tcbitemize}
-\end{minipage}
-\captionof{figure}{Szablon drugiego znaku}
-
