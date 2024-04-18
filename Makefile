@@ -28,7 +28,7 @@ TARGETDIR = bin
 LIBDIR = lib
 
 INCLUDES = -I.
-LIBS = -lm
+LIBS = -lm -llcdDisplay
 CFLAGS = -mmcu=$(MCU)
 CFLAGS += -std=c99 -Wall -Wundef -Wextra -pedantic -Wstrict-prototypes
 CFLAGS += -Os -g0 -flto
@@ -36,13 +36,14 @@ CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
 CFLAGS += -MD -MP -MF $(DEPDIR)/$(basename $(@F)).d
 CXXFLAGS = -mmcu=$(MCU)
 CXXFLAGS += -std=c++14 -Wall -Wundef -Wextra -pedantic
-CXXFLAGS += -Os -g0 -flto -fno-exceptions
+CXXFLAGS += -Os -g0 -flto -ffat-lto-objects -fno-exceptions
 CXXFLAGS += -Wa,-adhlns=$(<:%.cpp=$(OBJDIR)/%.lst)
 CXXFLAGS += -MD -MP -MF $(DEPDIR)/$(basename $(@F)).d
 LDFLAGS = -mmcu=$(MCU)
 LDFLAGS += -Os -g0 -flto
 #LDFLAGS += -Wl,-u,vfprintf -lprintf_flt -lm 
 LDFLAGS += -Wl,-Map=$(TARGET).map,--cref
+LDFLAGS += -L$(LIBDIR)
 DEFS = -DF_CPU=$(F_CPU)ul
 
 SRCS = $(wildcard *.cpp)
@@ -59,7 +60,7 @@ $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex $< $@
 
 $(TARGET).elf: $(OBJS) $(OBJS_LIB) | $(TARGETDIR)
-	$(CXX) $(LDFLAGS) $(LIBS) $(DEFS) -o $@ $(OBJS) $(OBJS_LIB)
+	$(CXX) $(LDFLAGS) $(DEFS) -o $@ $(OBJS) $(LIBS)
 
 $(TARGET).lss: $(TARGET).elf
 	$(OBJDUMP) -h -S $< > $@
